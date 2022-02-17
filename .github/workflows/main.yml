@@ -13,6 +13,7 @@ on:
 
 jobs:
   build:
+    name: test flutter build
     runs-on: ubuntu-latest
 
     steps:
@@ -22,11 +23,11 @@ jobs:
       # You can specify other versions if desired, see documentation here:
       # https://github.com/dart-lang/setup-dart/blob/main/README.md
       # - uses: dart-lang/setup-dart@v1
-      - uses: docker://cirrusci/flutter
-
+      - name: Setup flutter
+        uses: cirrusci/flutter@v1
       - name: get packages
         run: flutter pub get
       - name: analyze code
         run: flutter analyze
       - name: run tests
-        run: flutter test --coverage
+        run: flutter test
