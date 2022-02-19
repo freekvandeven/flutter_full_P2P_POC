@@ -1,3 +1,4 @@
+import 'package:distributed/src/config/theme.dart';
 import 'package:distributed/src/routes.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +8,7 @@ class ChipsDistributionGameApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: getTheme(),
       home: ChipsDistributionGame(),
     );
   }
@@ -23,6 +25,7 @@ class _ChipsDistributionGameState extends State<ChipsDistributionGame> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: getTheme(),
       routes: getRoutes(),
       initialRoute: ChipsRoute.homeScreen.route,
       onGenerateRoute: (settings) {
