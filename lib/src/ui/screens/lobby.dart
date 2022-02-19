@@ -1,4 +1,5 @@
 import 'package:distributed/src/routes.dart';
+import 'package:distributed/src/ui/screens/base.dart';
 import 'package:flutter/material.dart';
 
 class LobbyScreen extends StatelessWidget {
@@ -6,23 +7,25 @@ class LobbyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text('Lobby Screen'),
-        GestureDetector(
-          onTap: () {
-            Navigator.of(context).pushNamed(ChipsRoute.gameScreen.route);
-          },
-          child: Text('Go to game'),
-        ),
-        SizedBox(height: 20),
-        GestureDetector(
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-          child: Text('Go Back'),
-        ),
-      ],
+    return ChipsBaseScreen(
+      child: Column(
+        children: [
+          Text('Lobby Screen'),
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pushNamed(ChipsRoute.gameScreen.route);
+            },
+            child: Text('Go to game'),
+          ),
+          SizedBox(height: 20),
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Go Back'),
+          ),
+        ],
+      ),
     );
   }
 }

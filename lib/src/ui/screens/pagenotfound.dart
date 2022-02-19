@@ -1,3 +1,4 @@
+import 'package:distributed/src/ui/screens/base.dart';
 import 'package:flutter/material.dart';
 
 class PageNotFound extends StatelessWidget {
@@ -5,8 +6,10 @@ class PageNotFound extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text('Page not found'),
+    return ChipsBaseScreen(
+      child: Container(
+        child: Text('Page not found'),
+      ),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:distributed/src/ui/screens/base.dart';
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -5,16 +6,18 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text('Settings'),
-        GestureDetector(
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-          child: Text('Go back'),
-        ),
-      ],
+    return ChipsBaseScreen(
+      child: Column(
+        children: [
+          Text('Settings'),
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Go back'),
+          ),
+        ],
+      ),
     );
   }
 }

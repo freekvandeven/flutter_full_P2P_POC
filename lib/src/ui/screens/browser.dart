@@ -1,4 +1,5 @@
 import 'package:distributed/src/routes.dart';
+import 'package:distributed/src/ui/screens/base.dart';
 import 'package:flutter/material.dart';
 
 class GameBrowserScreen extends StatelessWidget {
@@ -6,8 +7,8 @@ class GameBrowserScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return ChipsBaseScreen(
+      child: Column(
         children: [
           Text('All active Games:'),
           Expanded(
