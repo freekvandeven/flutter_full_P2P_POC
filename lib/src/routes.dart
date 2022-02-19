@@ -1,5 +1,10 @@
 import 'package:distributed/src/extension/extension.dart';
+import 'package:distributed/src/ui/screens/browser.dart';
+import 'package:distributed/src/ui/screens/game.dart';
 import 'package:distributed/src/ui/screens/home.dart';
+import 'package:distributed/src/ui/screens/lobby.dart';
+import 'package:distributed/src/ui/screens/pagenotfound.dart';
+import 'package:distributed/src/ui/screens/settings.dart';
 import 'package:flutter/material.dart';
 
 class ChipsRoute {
@@ -7,10 +12,16 @@ class ChipsRoute {
 
   //global
   static const homeScreen = ChipsRoute('home-screen');
+  static const settingsScreen = ChipsRoute('settings-screen');
+  static const gameBrowserScreen = ChipsRoute('game-browser-screen');
+  static const lobbyScreen = ChipsRoute('lobby-screen');
+  static const gameScreen = ChipsRoute('game-screen');
+  static const pageNotExist = ChipsRoute('page-not-exist');
+
   final String route;
 
   @override
-  String toString(){
+  String toString() {
     return route;
   }
 
@@ -51,7 +62,11 @@ typedef NavigateAction = void Function(BuildContext);
 
 Map<String, WidgetBuilder> getRoutes() {
   return {
-    ChipsRoute.homeScreen: (context) => HomeScreen(
-        ),
+    ChipsRoute.homeScreen: (context) => HomeScreen(),
+    ChipsRoute.settingsScreen: (context) => SettingsScreen(),
+    ChipsRoute.gameBrowserScreen: (context) => GameBrowserScreen(),
+    ChipsRoute.lobbyScreen: (context) => LobbyScreen(),
+    ChipsRoute.gameScreen: (context) => GameScreen(),
+    ChipsRoute.pageNotExist: (context) => PageNotFound(),
   }.map((key, value) => MapEntry(key.toString(), value));
 }

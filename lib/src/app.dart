@@ -31,10 +31,7 @@ class _ChipsDistributionGameState extends State<ChipsDistributionGame> {
           return MaterialPageRoute(builder: routes[settings.name]!);
         } else {
           return MaterialPageRoute(
-            builder: (context) => Scaffold(
-              body:
-                  Center(child: Text('No route defined for ${settings.name}')),
-            ),
+            builder: routes[ChipsRoute.pageNotExist.route]!,
           );
         }
       },
