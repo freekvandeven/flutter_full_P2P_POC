@@ -2,7 +2,7 @@ include: package:flutter_lints/flutter.yaml
 analyzer:
   errors:
     todo: info
-  exclude:
+  exclude: [lib/generated_plugin_registrant.dart]
 linter:
   # https://dart.dev/tools/linter-rules#lints
   rules:
