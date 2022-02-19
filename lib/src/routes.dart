@@ -1,4 +1,5 @@
 import 'package:distributed/src/extension/extension.dart';
+import 'package:distributed/src/service/socket.dart';
 import 'package:distributed/src/ui/screens/browser.dart';
 import 'package:distributed/src/ui/screens/game.dart';
 import 'package:distributed/src/ui/screens/home.dart';
@@ -6,6 +7,7 @@ import 'package:distributed/src/ui/screens/lobby.dart';
 import 'package:distributed/src/ui/screens/pagenotfound.dart';
 import 'package:distributed/src/ui/screens/settings.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ChipsRoute {
   const ChipsRoute(this.route);
@@ -61,10 +63,12 @@ class ChipsRoute {
 typedef NavigateAction = void Function(BuildContext);
 
 Map<String, WidgetBuilder> getRoutes() {
-  return {
+  return <ChipsRoute, Widget Function(BuildContext)>{
     ChipsRoute.homeScreen: (context) => HomeScreen(),
     ChipsRoute.settingsScreen: (context) => SettingsScreen(),
-    ChipsRoute.gameBrowserScreen: (context) => GameBrowserScreen(),
+    ChipsRoute.gameBrowserScreen: (context) => GameBrowserScreen(
+          socketService: context.read<SocketService>(),
+        ),
     ChipsRoute.lobbyScreen: (context) => LobbyScreen(),
     ChipsRoute.gameScreen: (context) => GameScreen(),
     ChipsRoute.pageNotExist: (context) => PageNotFound(),
