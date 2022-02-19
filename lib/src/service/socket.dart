@@ -14,6 +14,7 @@ abstract class SocketService {
 class ChipsSocketService implements SocketService {
   ServerSocket? _socket;
   Socket? _clientSocket;
+  final List<Socket> _connectedClients = [];
 
   @override
   Future<ServerSocket> startServer() async {
@@ -37,7 +38,7 @@ class ChipsSocketService implements SocketService {
       'Connection from'
       ' ${client.remoteAddress.address}:${client.remotePort}',
     );
-
+    _connectedClients.add(client);
     // listen for events from the client
     client.listen(
       // handle data from the client
@@ -58,12 +59,14 @@ class ChipsSocketService implements SocketService {
       // handle errors
       onError: (error) {
         debugPrint(error);
+        _connectedClients.remove(client);
         client.close();
       },
 
       // handle the client closing the connection
       onDone: () {
         debugPrint('Client left');
+        _connectedClients.remove(client);
         client.close();
       },
     );
