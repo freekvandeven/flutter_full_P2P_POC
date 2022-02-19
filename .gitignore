@@ -50,3 +50,6 @@ app.*.map.json
 # Build configuration files
 .env
 lib/env_config.dart
+
+# ignore flutter screenshots
+flutter*.png

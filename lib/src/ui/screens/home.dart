@@ -193,13 +193,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                   style: Theme.of(context).textTheme.headline2,
                                 ),
                                 Text(
-                                  'No need for a long story or deep mechanics,'
-                                  ' we chose to keep the game plain & simple. \n'
-                                  'The design is inspired by the original board '
-                                  'game, where information & material flows are\n'
-                                  'clearly represented.\nEach player has its own '
-                                  'view, a messaging service is integrated if '
-                                  'you allow it.',
+                                  'No need for a long story or '
+                                  'deep mechanics,we chose to keep '
+                                  'the game plain & simple.\nThe '
+                                  'design is inspired by the original '
+                                  'board game, where information & '
+                                  'material flows are\nclearly '
+                                  'represented.\nEach player has '
+                                  'its own view, a messaging service '
+                                  'is integrated if you allow it.',
                                   style: Theme.of(context).textTheme.bodyText1,
                                 )
                               ],
