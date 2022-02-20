@@ -1,6 +1,6 @@
 import 'package:distributed/src/extension/extension.dart';
 import 'package:distributed/src/service/ip.dart';
-import 'package:distributed/src/service/socket.dart';
+import 'package:distributed/src/service/server.dart';
 import 'package:distributed/src/ui/screens/browser.dart';
 import 'package:distributed/src/ui/screens/game.dart';
 import 'package:distributed/src/ui/screens/home.dart';
@@ -65,14 +65,19 @@ typedef NavigateAction = void Function(BuildContext);
 
 Map<String, WidgetBuilder> getRoutes() {
   return <ChipsRoute, Widget Function(BuildContext)>{
-    ChipsRoute.homeScreen: (context) => HomeScreen(),
+    ChipsRoute.homeScreen: (context) => HomeScreen(
+          gameService: context.read(),
+        ),
     ChipsRoute.settingsScreen: (context) => SettingsScreen(),
     ChipsRoute.gameBrowserScreen: (context) => GameBrowserScreen(
-          socketService: context.read<SocketService>(),
+          serverSocketService: context.read(),
+          clientSocketService: context.read(),
+          gameService: context.read(),
         ),
     ChipsRoute.lobbyScreen: (context) => LobbyScreen(
-          socketService: context.read<SocketService>(),
+          socketService: context.read<ServerSocketService>(),
           ipService: context.read<IpService>(),
+          gameService: context.read(),
         ),
     ChipsRoute.gameScreen: (context) => GameScreen(),
     ChipsRoute.pageNotExist: (context) => PageNotFound(),

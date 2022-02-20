@@ -1,12 +1,22 @@
-import 'package:distributed/src/service/socket.dart';
+import 'package:distributed/src/models/player.dart';
+import 'package:distributed/src/routes.dart';
+import 'package:distributed/src/service/client.dart';
+import 'package:distributed/src/service/game.dart';
+import 'package:distributed/src/service/server.dart';
 import 'package:distributed/src/ui/screens/base.dart';
 import 'package:flutter/material.dart';
 
 class GameBrowserScreen extends StatefulWidget {
-  const GameBrowserScreen({required this.socketService, Key? key})
-      : super(key: key);
+  const GameBrowserScreen({
+    required this.serverSocketService,
+    required this.clientSocketService,
+    required this.gameService,
+    Key? key,
+  }) : super(key: key);
 
-  final SocketService socketService;
+  final ServerSocketService serverSocketService;
+  final ClientSocketService clientSocketService;
+  final GameService gameService;
 
   @override
   State<GameBrowserScreen> createState() => _GameBrowserScreenState();
@@ -15,6 +25,42 @@ class GameBrowserScreen extends StatefulWidget {
 class _GameBrowserScreenState extends State<GameBrowserScreen> {
   final TextEditingController _portController = TextEditingController();
   final TextEditingController _ipController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  bool routed = false;
+  @override
+  void dispose() {
+    widget.clientSocketService.removeListener(onConnected);
+    widget.gameService.removeListener(onJoined);
+    super.dispose();
+  }
+
+  void onConnected() {
+    debugPrint('connected to the server');
+    debugPrint('time to provide our own name, ip and port');
+    widget.clientSocketService.sendPlayerInfo(
+      PlayerInformation(
+        playerName: _nameController.text,
+        ip: 'test',
+        port: '1000',
+      ),
+    );
+    // Navigator.pushNamed(context, ChipsRoute.lobbyScreen.route);
+  }
+
+  void onJoined() {
+    if (mounted && !routed) {
+      routed = true;
+      debugPrint('routing to next screen');
+      Navigator.pushNamed(context, ChipsRoute.lobbyScreen.route);
+    }
+  }
+
+  @override
+  void initState() {
+    widget.gameService.addListener(onJoined);
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,18 +87,6 @@ class _GameBrowserScreenState extends State<GameBrowserScreen> {
                   'All active Games:',
                   style: Theme.of(context).textTheme.headline1,
                 ),
-                // Expanded(
-                //   child: ListView.builder(
-                //     itemCount: 10,
-                //     itemBuilder: (context, index) => ListTile(
-                //       title: Text('Game $index'),
-                //       onTap: () {
-                //         Navigator.
-                //pushNamed(context, ChipsRoute.gameScreen.route);
-                //       },
-                //     ),
-                //   ),
-                // ),
                 SizedBox(height: 10),
                 Text(
                   'Type port and IP to connect:',
@@ -78,12 +112,24 @@ class _GameBrowserScreenState extends State<GameBrowserScreen> {
                     ),
                   ),
                 ),
+                SizedBox(
+                  width: 200,
+                  child: TextField(
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      hintText: 'Playername',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
                 GestureDetector(
                   onTap: () {
                     if (_portController.text.isNotEmpty &&
                         _ipController.text.isNotEmpty &&
                         int.tryParse(_portController.text) != null) {
-                      widget.socketService.connectSocket(
+                      widget.serverSocketService.startServer();
+                      widget.clientSocketService.addListener(onConnected);
+                      widget.clientSocketService.connectSocket(
                         _ipController.text,
                         int.parse(_portController.text),
                       );

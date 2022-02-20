@@ -1,13 +1,8 @@
-import 'dart:io';
 
 class PlayerInformation {
-  PlayerInformation(this.playerName, this.socket);
+  PlayerInformation({this.playerName, this.ip, this.port});
 
   String? playerName;
-  Socket? socket;
-
-
-  void closeSocket(){
-    socket?.close();
-  }
+  String? ip;
+  String? port;
 }

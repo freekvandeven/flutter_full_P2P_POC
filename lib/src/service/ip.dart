@@ -17,7 +17,11 @@ class ChipsIpService extends ChangeNotifier implements IpService {
 
   @override
   void getIpAddress() {
-    _initNetworkInfo();
+    if (ipInformationMap == null) {
+      _initNetworkInfo();
+    } else {
+      notifyListeners();
+    }
   }
 
   @override
@@ -148,13 +152,13 @@ class ChipsIpService extends ChangeNotifier implements IpService {
         wifiGatewayIP = 'Failed to get Wifi gateway address';
       }
     }
-    ipInformationMap!['ipv4'] = wifiIPv4!;
-    ipInformationMap!['ipv6'] = wifiIPv6!;
-    ipInformationMap!['submask'] = wifiSubmask!;
-    ipInformationMap!['broadcast'] = wifiBroadcast!;
-    ipInformationMap!['gateway'] = wifiGatewayIP!;
-    ipInformationMap!['bssid'] = wifiBSSID!;
-    ipInformationMap!['ssid'] = wifiName!;
+    ipInformationMap!['ipv4'] = wifiIPv4 ?? '';
+    ipInformationMap!['ipv6'] = wifiIPv6 ?? '';
+    ipInformationMap!['submask'] = wifiSubmask ?? '';
+    ipInformationMap!['broadcast'] = wifiBroadcast ?? '';
+    ipInformationMap!['gateway'] = wifiGatewayIP ?? '';
+    ipInformationMap!['bssid'] = wifiBSSID ?? '';
+    ipInformationMap!['ssid'] = wifiName ?? '';
     notifyListeners();
   }
 }

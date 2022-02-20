@@ -1,6 +1,8 @@
+import 'package:distributed/src/models/player.dart';
 import 'package:distributed/src/routes.dart';
+import 'package:distributed/src/service/game.dart';
 import 'package:distributed/src/service/ip.dart';
-import 'package:distributed/src/service/socket.dart';
+import 'package:distributed/src/service/server.dart';
 import 'package:distributed/src/ui/screens/base.dart';
 import 'package:flutter/material.dart';
 
@@ -8,10 +10,12 @@ class LobbyScreen extends StatefulWidget {
   const LobbyScreen({
     required this.ipService,
     required this.socketService,
+    required this.gameService,
     Key? key,
   }) : super(key: key);
   final IpService ipService;
-  final SocketService socketService;
+  final ServerSocketService socketService;
+  final GameService gameService;
   @override
   State<LobbyScreen> createState() => _LobbyScreenState();
 }
@@ -19,34 +23,61 @@ class LobbyScreen extends StatefulWidget {
 class _LobbyScreenState extends State<LobbyScreen> {
   String ip = '';
   String port = '';
-  List<String> players = [];
+  List<PlayerInformation> players = [];
 
   @override
   void initState() {
     super.initState();
     debugPrint('LobbyScreen initState');
-    widget.ipService.addListener(updateIp);
-    widget.ipService.getIpAddress();
-    widget.socketService.addListener(updatePort);
-    widget.socketService.startServer();
+    players = widget.gameService.getGame()!.gameInformation.players;
+    // add postframe callback to get ip
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      widget.ipService.addListener(updateIp);
+      widget.ipService.getIpAddress();
+      widget.socketService.addListener(updatePort);
+      widget.socketService.startServer();
+      widget.gameService.addListener(updateGameInformation);
+    });
+  }
+
+  void updateGameInformation() {
+    setState(() {
+      if (widget.gameService.getGame() != null) {
+        players = widget.gameService.getGame()!.gameInformation.players;
+      }
+    });
   }
 
   void updatePort() {
-    setState(() {
-      port = widget.socketService.getSocket()!.port.toString();
-    });
+    if (mounted) {
+      setState(() {
+        port = widget.socketService.getSocket()!.port.toString();
+      });
+    }
+    if (widget.gameService.getGame() != null) {
+      widget.gameService.addNewPlayer(
+        PlayerInformation(
+          playerName: 'host',
+          ip: ip,
+          port: port,
+        ),
+      );
+    }
   }
 
   void updateIp() {
-    setState(() {
-      ip = widget.ipService.ipInformation!['ipv4'] ?? 'error';
-    });
+    if (mounted) {
+      setState(() {
+        ip = widget.ipService.ipInformation!['ipv4'] ?? 'error';
+      });
+    }
   }
 
   @override
   void dispose() {
     widget.ipService.removeListener(updateIp);
     widget.socketService.removeListener(updatePort);
+    widget.gameService.removeListener(updateGameInformation);
     super.dispose();
   }
 
@@ -105,7 +136,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
                       itemCount: players.length,
                       itemBuilder: (context, index) => ListTile(
                         title: Text(
-                          'Player $index: ${players[index]}',
+                          'Player $index: ${players[index].playerName}',
                           textAlign: TextAlign.center,
                         ),
                         onTap: () {

@@ -1,11 +1,12 @@
 import 'package:distributed/src/routes.dart';
+import 'package:distributed/src/service/game.dart';
 import 'package:distributed/src/ui/screens/base.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
+  const HomeScreen({required this.gameService, Key? key}) : super(key: key);
+  final GameService gameService;
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -48,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(height: 50),
                   GestureDetector(
                     onTap: () {
+                      widget.gameService.hostGame();
                       // create your own lobby and go to the lobby screen
                       Navigator.pushNamed(
                         context,
