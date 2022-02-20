@@ -1,37 +1,50 @@
-import 'dart:io';
-
 import 'package:distributed/src/routes.dart';
+import 'package:distributed/src/service/ip.dart';
 import 'package:distributed/src/service/socket.dart';
 import 'package:distributed/src/ui/screens/base.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:network_info_plus/network_info_plus.dart';
-import 'package:provider/provider.dart';
 
 class LobbyScreen extends StatefulWidget {
-  const LobbyScreen({Key? key}) : super(key: key);
-
+  const LobbyScreen({
+    required this.ipService,
+    required this.socketService,
+    Key? key,
+  }) : super(key: key);
+  final IpService ipService;
+  final SocketService socketService;
   @override
   State<LobbyScreen> createState() => _LobbyScreenState();
 }
 
 class _LobbyScreenState extends State<LobbyScreen> {
   String ip = '';
+  String port = '';
   List<String> players = [];
-  String _connectionStatus = 'Unknown';
-  final NetworkInfo _networkInfo = NetworkInfo();
 
   @override
   void initState() {
     super.initState();
     debugPrint('LobbyScreen initState');
-    context.read<SocketService>().startServer().then(
+    widget.ipService.addListener(updateIp);
+    widget.ipService.getIpAddress();
+    widget.socketService.startServer().then(
           (value) => setState(() {
-            ip = '${value.address.type} port: ${value.port.toString()}';
+            port = 'port: ${value.port.toString()}';
           }),
         );
-    _initNetworkInfo();
+  }
+
+  void updateIp() {
+    print('hallo');
+    setState(() {
+      ip = widget.ipService.ipInformation!['ipv4'] ?? 'error';
+    });
+  }
+
+  @override
+  void dispose() {
+    widget.ipService.removeListener(updateIp);
+    super.dispose();
   }
 
   @override
@@ -68,7 +81,10 @@ class _LobbyScreenState extends State<LobbyScreen> {
                   'Your Server IP: $ip',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                Text(_connectionStatus),
+                Text(
+                  'Your Server Port: $port',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
                 Column(
                   children: [
                     TextField(
@@ -165,142 +181,5 @@ class _LobbyScreenState extends State<LobbyScreen> {
         ],
       ),
     );
-  }
-
-  Future<void> _initNetworkInfo() async {
-    String? wifiName;
-    String? wifiBSSID;
-    String? wifiIPv4;
-    String? wifiIPv6;
-    String? wifiGatewayIP;
-    String? wifiBroadcast;
-    String? wifiSubmask;
-
-    try {
-      if (!kIsWeb && Platform.isIOS) {
-        var status = await _networkInfo.getLocationServiceAuthorization();
-        if (status == LocationAuthorizationStatus.notDetermined) {
-          status = await _networkInfo.requestLocationServiceAuthorization();
-        }
-        if (status == LocationAuthorizationStatus.authorizedAlways ||
-            status == LocationAuthorizationStatus.authorizedWhenInUse) {
-          wifiName = await _networkInfo.getWifiName();
-        } else {
-          wifiName = await _networkInfo.getWifiName();
-        }
-      } else {
-        wifiName = await _networkInfo.getWifiName();
-      }
-    } on PlatformException catch (e) {
-      debugPrint('Failed to get Wifi Name ${e.toString()}');
-      wifiName = 'Failed to get Wifi Name';
-    }
-
-    try {
-      if (!kIsWeb && Platform.isIOS) {
-        var status = await _networkInfo.getLocationServiceAuthorization();
-        if (status == LocationAuthorizationStatus.notDetermined) {
-          status = await _networkInfo.requestLocationServiceAuthorization();
-        }
-        if (status == LocationAuthorizationStatus.authorizedAlways ||
-            status == LocationAuthorizationStatus.authorizedWhenInUse) {
-          wifiBSSID = await _networkInfo.getWifiBSSID();
-        } else {
-          wifiBSSID = await _networkInfo.getWifiBSSID();
-        }
-      } else {
-        wifiBSSID = await _networkInfo.getWifiBSSID();
-      }
-    } on PlatformException catch (e) {
-      debugPrint('Failed to get Wifi BSSID ${e.toString()}');
-      wifiBSSID = 'Failed to get Wifi BSSID';
-    }
-
-    try {
-      wifiIPv4 = await _networkInfo.getWifiIP();
-    } on PlatformException catch (e) {
-      debugPrint(
-        'Failed to get Wifi IPv4 ${e.toString()}',
-      );
-      wifiIPv4 = 'Failed to get Wifi IPv4';
-    }
-
-    try {
-      wifiIPv6 = await _networkInfo.getWifiIPv6();
-    } catch (e) {
-      if (e is MissingPluginException) {
-        debugPrint(
-          'WINDOWS ${e.toString()}',
-        );
-
-        wifiIPv6 = 'Failed to get Wifi IPv6 because WINDOWS';
-      } else {
-        debugPrint(
-          'Failed to get Wifi IPv6 ${e.toString()}',
-        );
-        wifiIPv6 = 'Failed to get Wifi IPv6';
-      }
-    }
-
-    try {
-      wifiSubmask = await _networkInfo.getWifiSubmask();
-    } catch (e) {
-      if (e is MissingPluginException) {
-        debugPrint(
-          'WINDOWS ${e.toString()}',
-        );
-
-        wifiSubmask = 'Failed to get Wifi submask because WINDOWS';
-      } else {
-        debugPrint(
-          'Failed to get Wifi submask address ${e.toString()}',
-        );
-        wifiSubmask = 'Failed to get Wifi submask address';
-      }
-    }
-
-    try {
-      wifiBroadcast = await _networkInfo.getWifiBroadcast();
-    } catch (e) {
-      if (e is MissingPluginException) {
-        debugPrint(
-          'WINDOWS ${e.toString()}',
-        );
-
-        wifiBroadcast = 'Failed to get Wifi broadcast because WINDOWS';
-      } else {
-        debugPrint(
-          'Failed to get Wifi broadcast ${e.toString()}',
-        );
-        wifiBroadcast = 'Failed to get Wifi broadcast';
-      }
-    }
-
-    try {
-      wifiGatewayIP = await _networkInfo.getWifiGatewayIP();
-    } catch (e) {
-      if (e is MissingPluginException) {
-        debugPrint(
-          'WINDOWS ${e.toString()}',
-        );
-
-        wifiGatewayIP = 'Failed to get Wifi gateway address because WINDOWS';
-      } else {
-        debugPrint(
-          'Failed to get Wifi gateway address ${e.toString()}',
-        );
-        wifiGatewayIP = 'Failed to get Wifi gateway address';
-      }
-    }
-
-    setState(() {
-      _connectionStatus = 'Wifi Name: $wifiName\n'
-          'Wifi BSSID: $wifiBSSID\n'
-          'Wifi IPv4: $wifiIPv4\n'
-          'Wifi IPv6: $wifiIPv6\n'
-          'Wifi Broadcast: $wifiBroadcast\n'
-          'Wifi Gateway: $wifiGatewayIP\n'
-          'Wifi Submask: $wifiSubmask\n';
-    });
   }
 }

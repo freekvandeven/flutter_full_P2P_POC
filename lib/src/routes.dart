@@ -1,4 +1,5 @@
 import 'package:distributed/src/extension/extension.dart';
+import 'package:distributed/src/service/ip.dart';
 import 'package:distributed/src/service/socket.dart';
 import 'package:distributed/src/ui/screens/browser.dart';
 import 'package:distributed/src/ui/screens/game.dart';
@@ -69,7 +70,10 @@ Map<String, WidgetBuilder> getRoutes() {
     ChipsRoute.gameBrowserScreen: (context) => GameBrowserScreen(
           socketService: context.read<SocketService>(),
         ),
-    ChipsRoute.lobbyScreen: (context) => LobbyScreen(),
+    ChipsRoute.lobbyScreen: (context) => LobbyScreen(
+          socketService: context.read<SocketService>(),
+          ipService: context.read<IpService>(),
+        ),
     ChipsRoute.gameScreen: (context) => GameScreen(),
     ChipsRoute.pageNotExist: (context) => PageNotFound(),
   }.map((key, value) => MapEntry(key.toString(), value));

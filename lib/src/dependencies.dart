@@ -1,4 +1,5 @@
 import 'package:distributed/src/service/api.dart';
+import 'package:distributed/src/service/ip.dart';
 import 'package:distributed/src/service/socket.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,9 @@ class DependencyProvider extends StatelessWidget {
         // specify all services that need to be injected into the app
         Provider<ApiService>(
           create: (context) => ChipsApiService(),
+        ),
+        ChangeNotifierProvider<IpService>(
+          create: (context) => ChipsIpService(),
         ),
         Provider<SocketService>(
           create: (context) => ChipsSocketService(),
