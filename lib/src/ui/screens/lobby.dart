@@ -227,47 +227,70 @@ class _LobbyScreenState extends State<LobbyScreen> {
 
     try {
       wifiIPv6 = await _networkInfo.getWifiIPv6();
-    } on PlatformException catch (e) {
-      debugPrint(
-        'Failed to get Wifi IPv6 ${e.toString()}',
-      );
-      wifiIPv6 = 'Failed to get Wifi IPv6';
+    } catch (e) {
+      if (e is MissingPluginException) {
+        debugPrint(
+          'WINDOWS ${e.toString()}',
+        );
+
+        wifiIPv6 = 'Failed to get Wifi IPv6 because WINDOWS';
+      } else {
+        debugPrint(
+          'Failed to get Wifi IPv6 ${e.toString()}',
+        );
+        wifiIPv6 = 'Failed to get Wifi IPv6';
+      }
     }
 
     try {
       wifiSubmask = await _networkInfo.getWifiSubmask();
-    } on PlatformException catch (e) {
-      debugPrint(
-        'Failed to get Wifi submask address ${e.toString()}',
-      );
-      wifiSubmask = 'Failed to get Wifi submask address';
+    } catch (e) {
+      if (e is MissingPluginException) {
+        debugPrint(
+          'WINDOWS ${e.toString()}',
+        );
+
+        wifiSubmask = 'Failed to get Wifi submask because WINDOWS';
+      } else {
+        debugPrint(
+          'Failed to get Wifi submask address ${e.toString()}',
+        );
+        wifiSubmask = 'Failed to get Wifi submask address';
+      }
     }
 
     try {
       wifiBroadcast = await _networkInfo.getWifiBroadcast();
-    } on PlatformException catch (e) {
-      debugPrint(
-        'Failed to get Wifi broadcast ${e.toString()}',
-      );
-      wifiBroadcast = 'Failed to get Wifi broadcast';
+    } catch (e) {
+      if (e is MissingPluginException) {
+        debugPrint(
+          'WINDOWS ${e.toString()}',
+        );
+
+        wifiBroadcast = 'Failed to get Wifi broadcast because WINDOWS';
+      } else {
+        debugPrint(
+          'Failed to get Wifi broadcast ${e.toString()}',
+        );
+        wifiBroadcast = 'Failed to get Wifi broadcast';
+      }
     }
 
     try {
       wifiGatewayIP = await _networkInfo.getWifiGatewayIP();
-    } on PlatformException catch (e) {
-      debugPrint(
-        'Failed to get Wifi gateway address ${e.toString()}',
-      );
-      wifiGatewayIP = 'Failed to get Wifi gateway address';
-    }
+    } catch (e) {
+      if (e is MissingPluginException) {
+        debugPrint(
+          'WINDOWS ${e.toString()}',
+        );
 
-    try {
-      wifiSubmask = await _networkInfo.getWifiSubmask();
-    } on PlatformException catch (e) {
-      debugPrint(
-        'Failed to get Wifi submask ${e.toString()}',
-      );
-      wifiSubmask = 'Failed to get Wifi submask';
+        wifiGatewayIP = 'Failed to get Wifi gateway address because WINDOWS';
+      } else {
+        debugPrint(
+          'Failed to get Wifi gateway address ${e.toString()}',
+        );
+        wifiGatewayIP = 'Failed to get Wifi gateway address';
+      }
     }
 
     setState(() {
