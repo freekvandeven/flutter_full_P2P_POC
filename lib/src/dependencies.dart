@@ -20,9 +20,8 @@ class DependencyProvider extends StatelessWidget {
         ChangeNotifierProvider<IpService>(
           create: (context) => ChipsIpService(),
         ),
-        Provider<SocketService>(
+        ChangeNotifierProvider<SocketService>(
           create: (context) => ChipsSocketService(),
-          dispose: (context, service) => service.close(),
         ),
       ],
       child: child,

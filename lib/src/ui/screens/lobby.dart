@@ -27,15 +27,17 @@ class _LobbyScreenState extends State<LobbyScreen> {
     debugPrint('LobbyScreen initState');
     widget.ipService.addListener(updateIp);
     widget.ipService.getIpAddress();
-    widget.socketService.startServer().then(
-          (value) => setState(() {
-            port = 'port: ${value.port.toString()}';
-          }),
-        );
+    widget.socketService.addListener(updatePort);
+    widget.socketService.startServer();
+  }
+
+  void updatePort() {
+    setState(() {
+      port = widget.socketService.getSocket()!.port.toString();
+    });
   }
 
   void updateIp() {
-    print('hallo');
     setState(() {
       ip = widget.ipService.ipInformation!['ipv4'] ?? 'error';
     });
@@ -44,6 +46,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
   @override
   void dispose() {
     widget.ipService.removeListener(updateIp);
+    widget.socketService.removeListener(updatePort);
     super.dispose();
   }
 

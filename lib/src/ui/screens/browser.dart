@@ -13,7 +13,8 @@ class GameBrowserScreen extends StatefulWidget {
 }
 
 class _GameBrowserScreenState extends State<GameBrowserScreen> {
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _portController = TextEditingController();
+  final TextEditingController _ipController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -54,13 +55,23 @@ class _GameBrowserScreenState extends State<GameBrowserScreen> {
                 // ),
                 SizedBox(height: 10),
                 Text(
-                  'Type port on LAN to connect:',
+                  'Type port and IP to connect:',
                   style: Theme.of(context).textTheme.headline4,
                 ),
                 SizedBox(
-                  width: 300,
+                  width: 200,
                   child: TextField(
-                    controller: _controller,
+                    controller: _ipController,
+                    decoration: InputDecoration(
+                      hintText: 'Ip',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 200,
+                  child: TextField(
+                    controller: _portController,
                     decoration: InputDecoration(
                       hintText: 'Port',
                       border: OutlineInputBorder(),
@@ -69,9 +80,13 @@ class _GameBrowserScreenState extends State<GameBrowserScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    debugPrint(_controller.text);
-                    if (_controller.text.isNotEmpty) {
-                      widget.socketService.connectSocket(_controller.text);
+                    if (_portController.text.isNotEmpty &&
+                        _ipController.text.isNotEmpty &&
+                        int.tryParse(_portController.text) != null) {
+                      widget.socketService.connectSocket(
+                        _ipController.text,
+                        int.parse(_portController.text),
+                      );
                     }
                   },
                   child: Container(

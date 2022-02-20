@@ -4,33 +4,32 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
-abstract class SocketService {
-  Future<ServerSocket> startServer();
+abstract class SocketService implements ChangeNotifier {
+  Future<void> startServer();
   ServerSocket? getSocket();
-  Future<Socket> connectSocket(String socket);
-  void close();
+  Future<Socket> connectSocket(String ip, int port);
 }
 
-class ChipsSocketService implements SocketService {
+class ChipsSocketService extends ChangeNotifier implements SocketService {
   ServerSocket? _socket;
   Socket? _clientSocket;
   final List<Socket> _connectedClients = [];
 
   @override
-  Future<ServerSocket> startServer() async {
+  Future<void> startServer() async {
     debugPrint('starting server');
     if (_socket != null) {
       debugPrint('server already started');
-      return _socket!;
+    } else {
+      _socket = await ServerSocket.bind(
+        InternetAddress.anyIPv4,
+        0,
+      );
+      _socket?.listen(
+        handleConnection,
+      );
     }
-    _socket = await ServerSocket.bind(
-      InternetAddress.anyIPv4,
-      0,
-    );
-    _socket?.listen(
-      handleConnection,
-    );
-    return _socket!;
+    notifyListeners();
   }
 
   void handleConnection(Socket client) {
@@ -78,14 +77,9 @@ class ChipsSocketService implements SocketService {
   }
 
   @override
-  void close() {
-    _socket?.close();
-  }
-
-  @override
-  Future<Socket> connectSocket(String port) async {
+  Future<Socket> connectSocket(String ip, int port) async {
     debugPrint('connecting socket');
-    _clientSocket = await Socket.connect('192.168.188.27', int.parse(port));
+    _clientSocket = await Socket.connect(ip, port);
     debugPrint(
       'Connected to: ${_clientSocket!.remoteAddress.address}:'
       '${_clientSocket!.remotePort}',
