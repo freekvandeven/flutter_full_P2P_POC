@@ -30,7 +30,13 @@ class ChipsClientSocketService extends ChangeNotifier
       debugPrint('socket already connected');
       return;
     }
-    var socket = await Socket.connect(ip, port);
+    var socket = await Socket.connect(
+      InternetAddress(
+        ip, // '$ip%wlp3s0',
+        type: InternetAddressType.any,
+      ),
+      port,
+    );
     debugPrint(
       'Connected to: ${socket.remoteAddress.address}:'
       '${socket.remotePort}',

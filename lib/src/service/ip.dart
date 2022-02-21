@@ -161,4 +161,9 @@ class ChipsIpService extends ChangeNotifier implements IpService {
     ipInformationMap!['ssid'] = wifiName ?? '';
     notifyListeners();
   }
+
+  String getNetworkInterface() {
+    return 'wlp3s0';
+        // NetworkInterface.list().then((value) => print(value));
+  }
 }

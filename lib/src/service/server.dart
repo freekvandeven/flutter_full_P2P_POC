@@ -27,8 +27,8 @@ class ChipsServerSocketService extends ChangeNotifier
       debugPrint('server already started');
     } else {
       _socket = await ServerSocket.bind(
-        InternetAddress.anyIPv4,
-        0,
+        InternetAddress.anyIPv6,
+        0, // TODO(freek): add default port for host
       );
       _socket?.listen(
         handleConnection,

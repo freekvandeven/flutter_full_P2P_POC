@@ -1,3 +1,4 @@
+
 import 'package:distributed/src/models/player.dart';
 import 'package:distributed/src/routes.dart';
 import 'package:distributed/src/service/game.dart';
@@ -21,7 +22,8 @@ class LobbyScreen extends StatefulWidget {
 }
 
 class _LobbyScreenState extends State<LobbyScreen> {
-  String ip = '';
+  String ipv6 = '';
+  String ipv4 = '';
   String port = '';
   List<PlayerInformation> players = [];
 
@@ -58,7 +60,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
       widget.gameService.addNewPlayer(
         PlayerInformation(
           playerName: 'host',
-          ip: ip,
+          ip: ipv6,
           port: port,
         ),
       );
@@ -68,7 +70,8 @@ class _LobbyScreenState extends State<LobbyScreen> {
   void updateIp() {
     if (mounted) {
       setState(() {
-        ip = widget.ipService.ipInformation!['ipv4'] ?? 'error';
+        ipv4 = widget.ipService.ipInformation!['ipv4'] ?? 'error';
+        ipv6 = widget.ipService.ipInformation!['ipv6'] ?? 'error';
       });
     }
   }
@@ -112,7 +115,11 @@ class _LobbyScreenState extends State<LobbyScreen> {
                   style: Theme.of(context).textTheme.headline4,
                 ),
                 Text(
-                  'Your Server IP: $ip',
+                  'Your Server IPv4: $ipv4',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                Text(
+                  'Your Server IPv6: $ipv6',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 Text(

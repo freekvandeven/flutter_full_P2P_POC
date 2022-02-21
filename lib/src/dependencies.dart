@@ -1,4 +1,3 @@
-import 'package:distributed/src/service/api.dart';
 import 'package:distributed/src/service/client.dart';
 import 'package:distributed/src/service/game.dart';
 import 'package:distributed/src/service/ip.dart';
@@ -16,9 +15,6 @@ class DependencyProvider extends StatelessWidget {
     return MultiProvider(
       providers: [
         // specify all services that need to be injected into the app
-        Provider<ApiService>(
-          create: (context) => ChipsApiService(),
-        ),
         ChangeNotifierProvider<GameService>(
           create: (context) => ChipsGameService(),
         ),
