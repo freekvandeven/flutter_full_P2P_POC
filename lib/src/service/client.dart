@@ -32,7 +32,10 @@ class ChipsClientSocketService extends ChangeNotifier
     }
     var socket = await Socket.connect(
       InternetAddress(
-        ip, // '$ip%wlp3s0',
+        // check if platform is android
+        Platform.isAndroid
+            ? '$ip%wlan0'
+            : ip, //'linux: wlp3s0', android '%wlan'
         type: InternetAddressType.any,
       ),
       port,
