@@ -7,6 +7,9 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChipsBaseScreen(
+      escapeTrigger: () {
+        Navigator.of(context).pop();
+      },
       child: Column(
         children: [
           Text('Settings'),

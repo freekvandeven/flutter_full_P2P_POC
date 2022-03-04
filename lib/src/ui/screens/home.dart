@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:distributed/src/routes.dart';
 import 'package:distributed/src/service/game.dart';
 import 'package:distributed/src/ui/screens/base.dart';
@@ -15,6 +17,31 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return ChipsBaseScreen(
+      escapeTrigger: () {
+        debugPrint('opening exit dialog');
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: Text('Are you sure you want to exit?'),
+            content: const Text(
+              'You will have to restart the application to continue playing.\n'
+              ' All active host information will be lost!',
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'Cancel'),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  exit(0);
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      },
       child: SingleChildScrollView(
         child: Column(
           children: [

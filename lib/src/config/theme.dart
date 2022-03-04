@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-ThemeData getTheme({bool helper = false}) {
+ThemeData getTheme() {
   return ThemeData(
     checkboxTheme: CheckboxThemeData(
       fillColor:

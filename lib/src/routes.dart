@@ -19,6 +19,9 @@ class ChipsRoute {
   static const gameBrowserScreen = ChipsRoute('game-browser-screen');
   static const lobbyScreen = ChipsRoute('lobby-screen');
   static const gameScreen = ChipsRoute('game-screen');
+  static const endScreen = ChipsRoute('end-screen');
+  static const creditScreen = ChipsRoute('credit-screen');
+  static const replayScreen = ChipsRoute('replay-screen');
   static const pageNotExist = ChipsRoute('page-not-exist');
 
   final String route;
