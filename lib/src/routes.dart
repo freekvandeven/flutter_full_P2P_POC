@@ -1,12 +1,12 @@
 import 'package:distributed/src/extension/extension.dart';
 import 'package:distributed/src/service/ip.dart';
 import 'package:distributed/src/service/server.dart';
-import 'package:distributed/src/ui/screens/browser.dart';
-import 'package:distributed/src/ui/screens/game.dart';
-import 'package:distributed/src/ui/screens/home.dart';
-import 'package:distributed/src/ui/screens/lobby.dart';
-import 'package:distributed/src/ui/screens/pagenotfound.dart';
-import 'package:distributed/src/ui/screens/settings.dart';
+import 'package:distributed/src/ui/screens/base/pagenotfound.dart';
+import 'package:distributed/src/ui/screens/game/game.dart';
+import 'package:distributed/src/ui/screens/home/home.dart';
+import 'package:distributed/src/ui/screens/lobby/browser.dart';
+import 'package:distributed/src/ui/screens/lobby/lobby.dart';
+import 'package:distributed/src/ui/screens/settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

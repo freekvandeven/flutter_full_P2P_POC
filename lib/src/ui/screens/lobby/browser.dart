@@ -3,7 +3,7 @@ import 'package:distributed/src/routes.dart';
 import 'package:distributed/src/service/client.dart';
 import 'package:distributed/src/service/game.dart';
 import 'package:distributed/src/service/server.dart';
-import 'package:distributed/src/ui/screens/base.dart';
+import 'package:distributed/src/ui/screens/base/base.dart';
 import 'package:flutter/material.dart';
 
 class GameBrowserScreen extends StatefulWidget {

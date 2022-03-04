@@ -1,4 +1,4 @@
-import 'package:distributed/src/ui/screens/base.dart';
+import 'package:distributed/src/ui/screens/base/base.dart';
 import 'package:flutter/material.dart';
 
 class GameScreen extends StatelessWidget {
