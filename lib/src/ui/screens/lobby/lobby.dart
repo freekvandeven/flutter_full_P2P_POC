@@ -190,8 +190,8 @@ class _LobbyScreenState extends State<LobbyScreen> {
                   SizedBox(
                     height: 20,
                   ),
-                  GestureDetector(
-                    onTap: () async {
+                  PrimaryButton(
+                    onPressed: () async {
                       if (lobbyStarted) {
                         var navigator = Navigator.of(context);
                         var code = await showDialog(
@@ -208,30 +208,20 @@ class _LobbyScreenState extends State<LobbyScreen> {
                         });
                       }
                     },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 25,
-                        vertical: 15,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Theme.of(context).cardColor,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.play_circle_outline_outlined,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Start ${lobbyStarted ? 'Game' : 'Lobby'}',
-                            style: Theme.of(context).textTheme.headline4,
-                          ),
-                        ],
-                      ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.play_circle_outline_outlined,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          'Start ${lobbyStarted ? 'Game' : 'Lobby'}',
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(height: 30),

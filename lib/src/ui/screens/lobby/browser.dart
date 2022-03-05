@@ -4,6 +4,9 @@ import 'package:distributed/src/service/client.dart';
 import 'package:distributed/src/service/game.dart';
 import 'package:distributed/src/service/server.dart';
 import 'package:distributed/src/ui/screens/base/base.dart';
+import 'package:distributed/src/ui/screens/lobby/widgets/lobby_games.dart';
+import 'package:distributed/src/ui/screens/lobby/widgets/manual_connect.dart';
+import 'package:distributed/src/ui/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
 
 class GameBrowserScreen extends StatefulWidget {
@@ -23,9 +26,6 @@ class GameBrowserScreen extends StatefulWidget {
 }
 
 class _GameBrowserScreenState extends State<GameBrowserScreen> {
-  final TextEditingController _portController = TextEditingController();
-  final TextEditingController _ipController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
   bool routed = false;
   @override
   void dispose() {
@@ -39,7 +39,7 @@ class _GameBrowserScreenState extends State<GameBrowserScreen> {
     debugPrint('time to provide our own name, ip and port');
     widget.clientSocketService.sendPlayerInfo(
       PlayerInformation(
-        playerName: _nameController.text,
+        playerName: 'Freek',
         ip: 'test',
         port: '1000',
       ),
@@ -58,7 +58,6 @@ class _GameBrowserScreenState extends State<GameBrowserScreen> {
   @override
   void initState() {
     widget.gameService.addListener(onJoined);
-
     super.initState();
   }
 
@@ -70,129 +69,61 @@ class _GameBrowserScreenState extends State<GameBrowserScreen> {
       },
       child: Column(
         children: [
-          Container(
-            width: double.infinity,
+          DecoratedBox(
             decoration: BoxDecoration(
-              //lineargradient
               gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
                 colors: [
-                  Color(0xFFe8e9eb),
-                  Color(0xFFc5cad6),
+                  Color.fromARGB(255, 120, 185, 238),
+                  Color.fromARGB(255, 149, 179, 230),
                 ],
               ),
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  'All active Games:',
-                  style: Theme.of(context).textTheme.headline1,
-                ),
-                SizedBox(height: 10),
-                Text(
-                  'Type port and IP to connect:',
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-                SizedBox(
-                  width: 200,
-                  child: TextField(
-                    controller: _ipController,
-                    decoration: InputDecoration(
-                      hintText: 'Ip',
-                      border: OutlineInputBorder(),
-                    ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  child: Text(
+                    'Browser Screen',
+                    style: Theme.of(context).textTheme.headline1,
                   ),
                 ),
-                SizedBox(
-                  width: 200,
-                  child: TextField(
-                    controller: _portController,
-                    decoration: InputDecoration(
-                      hintText: 'Port',
-                      border: OutlineInputBorder(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Flexible(
+                      child: BrowserGameslistWidget(),
                     ),
-                  ),
+                    Flexible(
+                      child: Center(
+                        child: ManualConnectWidget(),
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(
-                  width: 200,
-                  child: TextField(
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                      hintText: 'Playername',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
+                  height: 30,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    if (_portController.text.isNotEmpty &&
-                        _ipController.text.isNotEmpty &&
-                        int.tryParse(_portController.text) != null) {
-                      widget.serverSocketService.startServer();
-                      widget.clientSocketService.addListener(onConnected);
-                      widget.clientSocketService.connectSocket(
-                        _ipController.text,
-                        int.parse(_portController.text),
-                      );
-                    }
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 25,
-                      vertical: 15,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Theme.of(context).cardColor,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(Icons.connect_without_contact),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text('Connect'),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                GestureDetector(
-                  onTap: () {
+                PrimaryButton(
+                  onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 25,
-                      vertical: 15,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Theme.of(context).cardColor,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(Icons.arrow_back),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text('Go Back'),
-                      ],
-                    ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.arrow_back),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Go Back',
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(
-                  height: 50,
+                  height: 20,
                 ),
               ],
             ),
