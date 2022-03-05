@@ -1,4 +1,5 @@
 import 'package:distributed/src/models/player.dart';
+import 'package:distributed/src/ui/widgets/dialogs/player_info.dart';
 import 'package:flutter/material.dart';
 
 class LobbyPlayerlistWidget extends StatelessWidget {
@@ -19,17 +20,45 @@ class LobbyPlayerlistWidget extends StatelessWidget {
           'Lobby players:',
           style: Theme.of(context).textTheme.headline2,
         ),
-        Container(
-          child: ListView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: 5,
-            itemBuilder: (context, index) => ListTile(
-              title: Text(
-                'Player $index: ',
-                textAlign: TextAlign.center,
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 200.0,
+            vertical: 20.0,
+          ),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Theme.of(context).colorScheme.secondary,
+                width: 4,
               ),
-              onTap: () {},
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.grey,
+            ),
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: 5,
+              itemBuilder: (context, index) => ListTile(
+                title: Text(
+                  'Player $index: (name, role)',
+                  textAlign: TextAlign.center,
+                ),
+                selected: true,
+                tileColor: Colors.amberAccent,
+                selectedTileColor: Colors.green,
+                textColor: Colors.purple,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                iconColor: Colors.green,
+                onTap: () {
+                  debugPrint('Tapped on player $index');
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => PlayerInfoDialog(),
+                  );
+                },
+              ),
             ),
           ),
         ),

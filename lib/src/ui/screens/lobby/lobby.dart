@@ -11,6 +11,7 @@ import 'package:distributed/src/ui/screens/lobby/widgets/player_configuration.da
 import 'package:distributed/src/ui/widgets/buttons/primary_button.dart';
 import 'package:distributed/src/ui/widgets/chat.dart';
 import 'package:distributed/src/ui/widgets/dialogs/exit_lobby.dart';
+import 'package:distributed/src/ui/widgets/dialogs/start_game.dart';
 import 'package:flutter/material.dart';
 
 class LobbyScreen extends StatefulWidget {
@@ -190,10 +191,17 @@ class _LobbyScreenState extends State<LobbyScreen> {
                     height: 20,
                   ),
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       if (lobbyStarted) {
-                        Navigator.of(context)
-                            .pushNamed(ChipsRoute.gameScreen.route);
+                        var navigator = Navigator.of(context);
+                        var code = await showDialog(
+                          context: context,
+                          builder: (BuildContext context) => GameStartDialog(),
+                        );
+                        if (code == 'Start') {
+                          await navigator
+                              .pushNamed(ChipsRoute.gameScreen.route);
+                        }
                       } else {
                         setState(() {
                           lobbyStarted = true;
