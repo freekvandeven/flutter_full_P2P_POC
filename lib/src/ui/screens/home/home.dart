@@ -4,6 +4,7 @@ import 'package:distributed/src/ui/screens/base/base.dart';
 import 'package:distributed/src/ui/widgets/buttons/primary_button.dart';
 import 'package:distributed/src/ui/widgets/dialogs/quit_app.dart';
 import 'package:distributed/src/ui/widgets/game_explainer.dart';
+import 'package:distributed/src/ui/widgets/painters/graph_painter.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -40,149 +41,153 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 100.0, bottom: 10),
-                    child: Text(
-                      'Play the Beer Game',
-                      style: Theme.of(context).textTheme.headline1,
+              child: DecoratedBox(
+                decoration: GraphPainter(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 100.0, bottom: 10),
+                      child: Text(
+                        'Play the Beer Game',
+                        style: Theme.of(context).textTheme.headline1,
+                      ),
                     ),
-                  ),
-                  Text(
-                    'Learn supply-chain principles through a visual simulation',
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                  SizedBox(height: 50),
-                  PrimaryButton(
-                    onPressed: () {
-                      // widget.gameService.hostGame();
-                      // create your own lobby and go to the lobby screen
-                      Navigator.pushNamed(
-                        context,
-                        ChipsRoute.lobbyScreen.route,
-                      );
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.add_box_outlined),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Start a new game',
-                          style: Theme.of(context).textTheme.headline4,
-                        ),
-                      ],
+                    Text(
+                      'Learn supply-chain principles '
+                      'through a visual simulation',
+                      style: Theme.of(context).textTheme.headline4,
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  PrimaryButton(
-                    onPressed: () {
-                      // look for existing lobbies on the network and join them
-                      Navigator.pushNamed(
-                        context,
-                        ChipsRoute.gameBrowserScreen.route,
-                      );
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.exit_to_app_rounded),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Join an existing game',
-                          style: Theme.of(context).textTheme.headline4,
-                        ),
-                      ],
+                    SizedBox(height: 50),
+                    PrimaryButton(
+                      onPressed: () {
+                        // widget.gameService.hostGame();
+                        // create your own lobby and go to the lobby screen
+                        Navigator.pushNamed(
+                          context,
+                          ChipsRoute.lobbyScreen.route,
+                        );
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.add_box_outlined),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'Start a new game',
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  PrimaryButton(
-                    onPressed: () {
-                      // look for previous games
-                      Navigator.pushNamed(
-                        context,
-                        ChipsRoute.replayScreen.route,
-                      );
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.replay),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Watch a replay',
-                          style: Theme.of(context).textTheme.headline4,
-                        ),
-                      ],
+                    SizedBox(
+                      height: 20,
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  PrimaryButton(
-                    onPressed: () {
-                      // change your app settings
-                      Navigator.pushNamed(
-                        context,
-                        ChipsRoute.settingsScreen.route,
-                      );
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.settings),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Change settings',
-                          style: Theme.of(context).textTheme.headline4,
-                        ),
-                      ],
+                    PrimaryButton(
+                      onPressed: () {
+                        // look for existing lobbies on the network
+                        Navigator.pushNamed(
+                          context,
+                          ChipsRoute.gameBrowserScreen.route,
+                        );
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.exit_to_app_rounded),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'Join an existing game',
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  PrimaryButton(
-                    onPressed: () {
-                      // change your app settings
-                      Navigator.pushNamed(
-                        context,
-                        ChipsRoute.creditScreen.route,
-                      );
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.info_outlined),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'Credits',
-                          style: Theme.of(context).textTheme.headline4,
-                        ),
-                      ],
+                    SizedBox(
+                      height: 20,
                     ),
-                  ),
-                  SizedBox(
-                    height: 100,
-                  ),
-                ],
+                    PrimaryButton(
+                      onPressed: () {
+                        // look for previous games
+                        Navigator.pushNamed(
+                          context,
+                          ChipsRoute.replayScreen.route,
+                        );
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.replay),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'Watch a replay',
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    PrimaryButton(
+                      onPressed: () {
+                        // change your app settings
+                        Navigator.pushNamed(
+                          context,
+                          ChipsRoute.settingsScreen.route,
+                        );
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.settings),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'Change settings',
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    PrimaryButton(
+                      onPressed: () {
+                        // change your app settings
+                        Navigator.pushNamed(
+                          context,
+                          ChipsRoute.creditScreen.route,
+                        );
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.info_outlined),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'Credits',
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 100,
+                    ),
+                  ],
+                ),
               ),
             ),
             // second half of the page
