@@ -32,8 +32,9 @@ class _ChipsDistributionGameState extends State<ChipsDistributionGame> {
         var routes = getAnimatedRoutes();
         if (routes.containsKey(settings.name)) {
           return PageRouteBuilder(
-            settings: RouteSettings(),
+            settings: RouteSettings(name: settings.name),
             pageBuilder: routes[settings.name]!,
+            transitionsBuilder: (_, __, ___, ____) => Container(),
             transitionDuration: Duration(seconds: 10),
             reverseTransitionDuration: Duration(seconds: 10),
           );
