@@ -29,12 +29,17 @@ class _ChipsDistributionGameState extends State<ChipsDistributionGame> {
       routes: getRoutes(),
       initialRoute: ChipsRoute.homeScreen.route,
       onGenerateRoute: (settings) {
-        var routes = getRoutes();
+        var routes = getAnimatedRoutes();
         if (routes.containsKey(settings.name)) {
-          return MaterialPageRoute(builder: routes[settings.name]!);
+          return PageRouteBuilder(
+            settings: RouteSettings(),
+            pageBuilder: routes[settings.name]!,
+            transitionDuration: Duration(seconds: 10),
+            reverseTransitionDuration: Duration(seconds: 10),
+          );
         } else {
-          return MaterialPageRoute(
-            builder: routes[ChipsRoute.pageNotExist.route]!,
+          return PageRouteBuilder(
+            pageBuilder: routes[ChipsRoute.pageNotExist.route]!,
           );
         }
       },

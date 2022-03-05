@@ -20,13 +20,6 @@ class _ChipsBaseScreenState extends State<ChipsBaseScreen> {
   final FocusNode _focusNode = FocusNode();
 
   @override
-  void dispose() {
-    timer?.cancel();
-    _focusNode.dispose();
-    super.dispose();
-  }
-
-  @override
   void initState() {
     timer = Timer(const Duration(seconds: 1), () {
       setState(() {
@@ -34,6 +27,13 @@ class _ChipsBaseScreenState extends State<ChipsBaseScreen> {
       });
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    _focusNode.dispose();
+    super.dispose();
   }
 
   @override

@@ -3,14 +3,14 @@ import 'package:distributed/src/ui/screens/base/base.dart';
 import 'package:distributed/src/ui/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
 
-class GameScreen extends StatelessWidget {
-  const GameScreen({Key? key}) : super(key: key);
+class GameEndScreen extends StatelessWidget {
+  const GameEndScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChipsBaseScreen(
       escapeTrigger: () {
-        // open escape menu
+        Navigator.of(context).pop();
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -33,12 +33,12 @@ class GameScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 100.0, bottom: 10),
                   child: Text(
-                    'Game Screen',
+                    'Game Over',
                     style: Theme.of(context).textTheme.headline1,
                   ),
                 ),
                 Text(
-                  'You are playing the game right now',
+                  'You can view all stats from the previous game here',
                   style: Theme.of(context).textTheme.headline4,
                 ),
                 SizedBox(
@@ -46,21 +46,22 @@ class GameScreen extends StatelessWidget {
                 ),
                 PrimaryButton(
                   onPressed: () {
-                    Navigator.of(context).pushReplacementNamed(
-                      ChipsRoute.endScreen.route,
+                    Navigator.pushReplacementNamed(
+                      context,
+                      ChipsRoute.homeScreen.route,
                     );
                   },
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(
-                        Icons.east_rounded,
+                        Icons.arrow_back_rounded,
                       ),
                       SizedBox(
                         width: 10,
                       ),
                       Text(
-                        'End game',
+                        'Back to Home',
                         style: Theme.of(context).textTheme.headline4,
                       ),
                     ],
@@ -74,7 +75,7 @@ class GameScreen extends StatelessWidget {
           ),
           Container(
             child: Text(
-              'Agent configuration',
+              'Stats',
             ),
           ),
         ],
