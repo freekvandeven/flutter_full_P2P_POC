@@ -1,6 +1,7 @@
 import 'package:distributed/src/routes.dart';
 import 'package:distributed/src/ui/screens/base/base.dart';
 import 'package:distributed/src/ui/widgets/buttons/primary_button.dart';
+import 'package:distributed/src/ui/widgets/dialogs/game_menu.dart';
 import 'package:flutter/material.dart';
 
 class GameScreen extends StatelessWidget {
@@ -9,8 +10,20 @@ class GameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChipsBaseScreen(
-      escapeTrigger: () {
+      escapeTrigger: () async {
+        var navigator = Navigator.of(context);
         // open escape menu
+        var code = await showDialog(
+          context: context,
+          builder: (BuildContext context) => GameMenuDialog(),
+        );
+        if (code == 'Exit') {
+          // exit game
+          await navigator.pushNamedAndRemoveUntil(
+            ChipsRoute.homeScreen.route,
+            (route) => false,
+          );
+        }
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

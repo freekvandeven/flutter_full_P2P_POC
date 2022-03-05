@@ -19,7 +19,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return ChipsBaseScreen(
       escapeTrigger: () {
-        debugPrint('opening exit dialog');
         showDialog(
           context: context,
           builder: (BuildContext context) => QuitAppDialog(),
@@ -63,7 +62,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     PrimaryButton(
                       onPressed: () {
                         // widget.gameService.hostGame();
-                        // create your own lobby and go to the lobby screen
                         Navigator.pushNamed(
                           context,
                           ChipsRoute.lobbyScreen.route,

@@ -1,10 +1,10 @@
-
 import 'package:distributed/src/models/player.dart';
 import 'package:distributed/src/routes.dart';
 import 'package:distributed/src/service/game.dart';
 import 'package:distributed/src/service/ip.dart';
 import 'package:distributed/src/service/server.dart';
 import 'package:distributed/src/ui/screens/base/base.dart';
+import 'package:distributed/src/ui/widgets/dialogs/exit_lobby.dart';
 import 'package:flutter/material.dart';
 
 class LobbyScreen extends StatefulWidget {
@@ -87,6 +87,16 @@ class _LobbyScreenState extends State<LobbyScreen> {
   @override
   Widget build(BuildContext context) {
     return ChipsBaseScreen(
+      escapeTrigger: () async {
+        var navigator = Navigator.of(context);
+        var code = await showDialog(
+          context: context,
+          builder: (BuildContext context) => ExitLobbyDialog(),
+        );
+        if (code == 'Exit') {
+          navigator.pop();
+        }
+      },
       child: Column(
         children: [
           Container(

@@ -44,18 +44,25 @@ class _ChipsBaseScreenState extends State<ChipsBaseScreen> {
       onKey: (event) {
         if (_focusNode.hasFocus && event is RawKeyDownEvent) {
           debugPrint('_isTriggered: $_isTriggered');
-          if (event.logicalKey == LogicalKeyboardKey.escape && !_isTriggered) {
+          if (event.logicalKey == LogicalKeyboardKey.escape) {
             debugPrint('escape pressed');
-            widget.escapeTrigger?.call();
-            setState(() {
-              _isTriggered = true;
-              // trigger only once per second
-              timer = Timer(const Duration(seconds: 1), () {
-                setState(() {
-                  _isTriggered = false;
+            if (!_isTriggered) {
+              widget.escapeTrigger?.call();
+              setState(() {
+                _isTriggered = true;
+                // trigger only once per second
+                timer = Timer(const Duration(seconds: 1), () {
+                  setState(() {
+                    _isTriggered = false;
+                  });
                 });
               });
-            });
+            } else {
+              debugPrint(
+                'escape pressed but already triggered '
+                'or page still loading',
+              );
+            }
           }
         }
       },

@@ -1,19 +1,17 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
-class QuitAppDialog extends StatelessWidget {
-  const QuitAppDialog({
+class ExitLobbyDialog extends StatelessWidget {
+  const ExitLobbyDialog({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Are you sure you want to exit?'),
+      title: Text('Are you sure you want to leave the lobby?'),
       content: const Text(
-        'You will have to restart the application to continue playing.\n'
-        ' All active host information will be lost!',
+        'You will lose connection to all the players.\n'
+        ' If you are the host the entire lobby will be gone!',
       ),
       actions: <Widget>[
         TextButton(
@@ -22,9 +20,9 @@ class QuitAppDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            exit(0);
+            Navigator.pop(context, 'Exit');
           },
-          child: const Text('Ok'),
+          child: const Text('Exit'),
         ),
       ],
     );
