@@ -1,3 +1,4 @@
+import 'package:distributed/src/models/game_information.dart';
 import 'package:distributed/src/models/player.dart';
 import 'package:distributed/src/routes.dart';
 import 'package:distributed/src/service/game.dart';
@@ -36,11 +37,11 @@ class _LobbyScreenState extends State<LobbyScreen> {
   String playerName = '';
   String playerRole = '';
   String playerAgent = '';
+  GameInformation gameInformation = GameInformation();
 
   @override
   void initState() {
     super.initState();
-    debugPrint('LobbyScreen initState');
     // players = widget.gameService.getGame()!.gameInformation.players;
     // // add postframe callback to get ip
     // WidgetsBinding.instance?.addPostFrameCallback((_) {
@@ -150,7 +151,15 @@ class _LobbyScreenState extends State<LobbyScreen> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: HostConfigurationWidget(
-                                  isHost: false,
+                                  lobbyStarted: lobbyStarted,
+                                  gameInformation: gameInformation,
+                                  onSave: (game) {
+                                    debugPrint('update game information');
+                                    setState(() {
+                                      gameInformation = game;
+                                    });
+                                  },
+                                  isHost: true,
                                   ipInformation: ipInformation,
                                 ),
                               ),
@@ -162,7 +171,6 @@ class _LobbyScreenState extends State<LobbyScreen> {
                                   playerAgentCode: playerAgent,
                                   onSave: (name, role, agent) {
                                     // resend the playerinformation
-                                    debugPrint(name);
                                     setState(() {
                                       playerName = name;
                                       playerRole = role;
