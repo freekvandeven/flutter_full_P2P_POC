@@ -43,7 +43,6 @@ class _ChipsBaseScreenState extends State<ChipsBaseScreen> {
       focusNode: _focusNode,
       onKey: (event) {
         if (_focusNode.hasFocus && event is RawKeyDownEvent) {
-          debugPrint('_isTriggered: $_isTriggered');
           if (event.logicalKey == LogicalKeyboardKey.escape) {
             debugPrint('escape pressed');
             if (!_isTriggered) {

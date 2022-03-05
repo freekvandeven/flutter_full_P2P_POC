@@ -33,6 +33,9 @@ class _LobbyScreenState extends State<LobbyScreen> {
   String port = '';
   List<PlayerInformation> players = [];
   Map<String, String> ipInformation = {};
+  String playerName = '';
+  String playerRole = '';
+  String playerAgent = '';
 
   @override
   void initState() {
@@ -132,6 +135,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Flexible(
                         child: LobbyPlayerlistWidget(
@@ -141,11 +145,33 @@ class _LobbyScreenState extends State<LobbyScreen> {
                       Flexible(
                         child: Center(
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              HostConfigurationWidget(
-                                ipInformation: ipInformation,
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: HostConfigurationWidget(
+                                  isHost: false,
+                                  ipInformation: ipInformation,
+                                ),
                               ),
-                              PlayerConfigurationWidget(),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: PlayerConfigurationWidget(
+                                  playerName: playerName,
+                                  playerRole: playerRole,
+                                  playerAgentCode: playerAgent,
+                                  onSave: (name, role, agent) {
+                                    // resend the playerinformation
+                                    debugPrint(name);
+                                    setState(() {
+                                      playerName = name;
+                                      playerRole = role;
+                                      playerAgent = agent;
+                                    });
+                                    debugPrint('playerinformation updated');
+                                  },
+                                ),
+                              ),
                             ],
                           ),
                         ),
