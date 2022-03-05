@@ -4,6 +4,11 @@ import 'package:distributed/src/service/game.dart';
 import 'package:distributed/src/service/ip.dart';
 import 'package:distributed/src/service/server.dart';
 import 'package:distributed/src/ui/screens/base/base.dart';
+import 'package:distributed/src/ui/screens/lobby/widgets/host_configuration.dart';
+import 'package:distributed/src/ui/screens/lobby/widgets/lobby_players.dart';
+import 'package:distributed/src/ui/screens/lobby/widgets/player_configuration.dart';
+import 'package:distributed/src/ui/widgets/buttons/primary_button.dart';
+import 'package:distributed/src/ui/widgets/chat.dart';
 import 'package:distributed/src/ui/widgets/dialogs/exit_lobby.dart';
 import 'package:flutter/material.dart';
 
@@ -22,10 +27,12 @@ class LobbyScreen extends StatefulWidget {
 }
 
 class _LobbyScreenState extends State<LobbyScreen> {
+  bool lobbyStarted = false;
   String ipv6 = '';
   String ipv4 = '';
   String port = '';
   List<PlayerInformation> players = [];
+  Map<String, String> ipInformation = {};
 
   @override
   void initState() {
@@ -72,6 +79,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
       setState(() {
         ipv4 = widget.ipService.ipInformation!['ipv4'] ?? 'error';
         ipv6 = widget.ipService.ipInformation!['ipv6'] ?? 'error';
+        ipInformation = widget.ipService.ipInformation!;
       });
     }
   }
@@ -84,152 +92,132 @@ class _LobbyScreenState extends State<LobbyScreen> {
     super.dispose();
   }
 
+  Future<void> exitLobby() async {
+    var navigator = Navigator.of(context);
+    var code = await showDialog(
+      context: context,
+      builder: (BuildContext context) => ExitLobbyDialog(),
+    );
+    if (code == 'Exit') {
+      navigator.pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChipsBaseScreen(
       escapeTrigger: () async {
-        var navigator = Navigator.of(context);
-        var code = await showDialog(
-          context: context,
-          builder: (BuildContext context) => ExitLobbyDialog(),
-        );
-        if (code == 'Exit') {
-          navigator.pop();
-        }
+        await exitLobby();
       },
-      child: Column(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromARGB(255, 120, 185, 238),
-                  Color.fromARGB(255, 149, 179, 230),
-                ],
-              ),
-            ),
-            width: double.infinity,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Lobby Screen',
-                  style: Theme.of(context).textTheme.headline1,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'Lobby information:',
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-                Text(
-                  'Your Server IPv4: $ipv4',
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                Text(
-                  'Your Server IPv6: $ipv6',
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                Text(
-                  'Your Server Port: $port',
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                Column(
-                  children: [
-                    TextField(
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        hintText: 'Lobby name',
-                      ),
-                    ),
-                    Text(
-                      'Connected players: ${players.length}',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: players.length,
-                      itemBuilder: (context, index) => ListTile(
-                        title: Text(
-                          'Player $index: ${players[index].playerName}',
-                          textAlign: TextAlign.center,
-                        ),
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            ChipsRoute.gameScreen.route,
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 10),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 120, 185, 238),
+                    Color.fromARGB(255, 149, 179, 230),
                   ],
                 ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context)
-                        .pushNamed(ChipsRoute.gameScreen.route);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 25,
-                      vertical: 15,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Theme.of(context).cardColor,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.play_circle_outline_outlined,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text('Start Game'),
-                      ],
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20.0),
+                    child: Text(
+                      'Lobby Screen',
+                      style: Theme.of(context).textTheme.headline1,
                     ),
                   ),
-                ),
-                SizedBox(height: 40),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 25,
-                      vertical: 15,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: LobbyPlayerlistWidget(
+                          players: players,
+                        ),
+                      ),
+                      Flexible(
+                        child: Center(
+                          child: Column(
+                            children: [
+                              HostConfigurationWidget(
+                                ipInformation: ipInformation,
+                              ),
+                              PlayerConfigurationWidget(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      if (lobbyStarted) {
+                        Navigator.of(context)
+                            .pushNamed(ChipsRoute.gameScreen.route);
+                      } else {
+                        setState(() {
+                          lobbyStarted = true;
+                        });
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 25,
+                        vertical: 15,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Theme.of(context).cardColor,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.play_circle_outline_outlined,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'Start ${lobbyStarted ? 'Game' : 'Lobby'}',
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
+                        ],
+                      ),
                     ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Theme.of(context).cardColor,
-                    ),
+                  ),
+                  SizedBox(height: 30),
+                  PrimaryButton(
+                    onPressed: () async {
+                      await exitLobby();
+                    },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Icon(Icons.arrow_back),
                         SizedBox(
                           width: 10,
                         ),
-                        Text('Go Back'),
+                        Text(
+                          'Exit Lobby',
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
                       ],
                     ),
                   ),
-                ),
-                SizedBox(height: 20),
-              ],
+                  SizedBox(height: 20),
+                ],
+              ),
             ),
-          ),
-        ],
+            ChatWindow(),
+          ],
+        ),
       ),
     );
   }
