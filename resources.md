@@ -15,5 +15,9 @@ https://stackoverflow.com/questions/70226080/mockito-vs-mocktail-in-flutter
 https://docs.flutter.dev/cookbook/testing/integration/introduction
 https://docs.flutter.dev/cookbook/testing/widget/introduction
 
+How to test navigators with integration testing: <br>
+https://iiro.dev/writing-widget-tests-for-navigation-events/
+https://flutteragency.com/test-navigation-in-flutter/
+
 Is this another option???: <br>
 https://docs.flutter.dev/cookbook/testing/integration/profiling

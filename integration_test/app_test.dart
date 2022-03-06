@@ -12,13 +12,14 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('end-to-end test', () {
+    late MockNavigatorObserver mockObserver;
     testWidgets('whole app', (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
     });
     testWidgets('Settings button is present and triggers navigation',
         (WidgetTester tester) async {
-      var mockObserver = MockNavigatorObserver();
+      mockObserver = MockNavigatorObserver();
       await tester.pumpWidget(
         MaterialApp(
           navigatorObservers: [mockObserver],
@@ -26,11 +27,9 @@ void main() {
         ),
       );
       expect(find.byType(PrimaryButton), findsOneWidget);
-      await tester.tap(find.byType(PrimaryButton)); 
+      await tester.tap(find.byType(PrimaryButton));
       await tester.pumpAndSettle();
-
       // expect(find.byType(HomeScreen), findsOneWidget);
-
     });
   });
 }
