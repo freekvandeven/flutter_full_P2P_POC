@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:distributed/src/models/game_information.dart';
 import 'package:distributed/src/models/network_information.dart';
 import 'package:distributed/src/models/player.dart';
@@ -42,13 +44,11 @@ class _LobbyScreenState extends State<LobbyScreen> {
   @override
   void initState() {
     super.initState();
-    // players = widget.gameService.getGame()!.gameInformation.players;
     // // add postframe callback to get ip
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       widget.ipService.addListener(updateIp);
       widget.ipService.getIpAddress();
       widget.socketService.addListener(updatePort);
-      widget.socketService.startServer();
       widget.gameService.addListener(updateGameInformation);
     });
   }
@@ -201,6 +201,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
                               .pushNamed(ChipsRoute.gameScreen.route);
                         }
                       } else {
+                        unawaited(widget.socketService.startServer());
                         setState(() {
                           lobbyStarted = true;
                         });

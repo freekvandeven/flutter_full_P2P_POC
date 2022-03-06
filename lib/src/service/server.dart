@@ -28,7 +28,7 @@ class ChipsServerSocketService extends ChangeNotifier
     } else {
       _socket = await ServerSocket.bind(
         InternetAddress.anyIPv6,
-        0, // TODO(freek): add default port for host
+        42069, // TODO(freek): add default port for host
       );
       _socket?.listen(
         handleConnection,
@@ -42,7 +42,7 @@ class ChipsServerSocketService extends ChangeNotifier
       'Connection from'
       ' ${client.remoteAddress.address}:${client.remotePort}',
     );
-    _connectedClients.add(client);
+    // _connectedClients.add(client);
     // listen for events from the client
     client.listen(
       // handle data from the client
