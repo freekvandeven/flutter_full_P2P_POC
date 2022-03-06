@@ -33,5 +33,5 @@ jobs:
         run: flutter analyze
       - name: run unit tests
         run: flutter test
-      - name: run integration tests
-        run: flutter test integration_test
+      # - name: run integration tests
+      #   run: flutter test integration_test
