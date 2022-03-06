@@ -16,11 +16,13 @@ class DependencyProvider extends StatelessWidget {
     return MultiProvider(
       providers: [
         // specify all services that need to be injected into the app
-        ChangeNotifierProvider<GameService>(
-          create: (context) => ChipsGameService(),
-        ),
         ChangeNotifierProvider<IpService>(
           create: (context) => ChipsIpService(),
+        ),
+        ChangeNotifierProvider<GameService>(
+          create: (context) => ChipsGameService(
+            ipService: context.read(),
+          ),
         ),
         ChangeNotifierProvider<ClientSocketService>(
           create: (context) => ChipsClientSocketService(
@@ -31,7 +33,7 @@ class DependencyProvider extends StatelessWidget {
           create: (context) =>
               ChipsServerSocketService(gameService: context.read()),
         ),
-        Provider<NetworkScanService>(
+        ChangeNotifierProvider<NetworkScanService>(
           create: (context) => ChipsNetworkScanService(
             ipService: context.read(),
           ),

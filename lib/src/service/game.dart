@@ -1,5 +1,7 @@
 import 'package:distributed/src/models/game.dart';
 import 'package:distributed/src/models/player.dart';
+import 'package:distributed/src/models/responses/scan_information.dart';
+import 'package:distributed/src/service/services.dart';
 import 'package:flutter/material.dart';
 
 abstract class GameService implements ChangeNotifier {
@@ -9,10 +11,12 @@ abstract class GameService implements ChangeNotifier {
   void joinGame();
   Game? getGame();
   void addNewPlayer(PlayerInformation player);
+  ScanInformation getGameInformation();
 }
 
 class ChipsGameService extends ChangeNotifier implements GameService {
-  ChipsGameService();
+  ChipsGameService({required this.ipService});
+  final IpService ipService;
   Game? game;
 
   @override
@@ -41,5 +45,16 @@ class ChipsGameService extends ChangeNotifier implements GameService {
       }
       notifyListeners();
     }
+  }
+
+  @override
+  ScanInformation getGameInformation() {
+    return ScanInformation(
+      lobbyName: 'test',
+      connectedPlayers: 1,
+      maxPlayers: 4,
+      entryIP: ipService.ipInformation!.wifiIPv4!,
+      started: false,
+    );
   }
 }

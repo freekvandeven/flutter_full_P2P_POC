@@ -138,8 +138,7 @@ class ChipsIpService extends ChangeNotifier implements IpService {
         );
       }
     }
-    notifyListeners();
-    return ipInformationMap = NetworkInformation(
+    ipInformationMap = NetworkInformation(
       wifiName: wifiName,
       wifiBSSID: wifiBSSID,
       wifiIPv4: wifiIPv4,
@@ -148,6 +147,8 @@ class ChipsIpService extends ChangeNotifier implements IpService {
       wifiBroadcast: wifiBroadcast,
       wifiSubmask: wifiSubmask,
     );
+    notifyListeners();
+    return ipInformationMap!;
   }
 
   String getNetworkInterface() {

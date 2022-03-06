@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -64,6 +65,9 @@ class ChipsServerSocketService extends ChangeNotifier
           );
           client.write('You are connected');
           // if host tell all the client information
+        } else if(message == 'Whats up?') {
+          debugPrint('client asked for info');
+          client.write(jsonEncode(gameService.getGameInformation().toJson()));
         } else {
           client.write('Message received.');
           unawaited(client.close());
