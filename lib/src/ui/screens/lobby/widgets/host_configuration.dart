@@ -1,4 +1,5 @@
 import 'package:distributed/src/models/game_information.dart';
+import 'package:distributed/src/models/network_information.dart';
 import 'package:distributed/src/ui/widgets/buttons/primary_button.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ class HostConfigurationWidget extends StatefulWidget {
 
   final bool isHost;
   final bool lobbyStarted;
-  final Map<String, dynamic> ipInformation;
+  final NetworkInformation ipInformation;
   final GameInformation gameInformation;
   final Function(GameInformation) onSave;
 
@@ -173,15 +174,17 @@ class _HostConfigurationWidgetState extends State<HostConfigurationWidget> {
                                   style: Theme.of(context).textTheme.headline4,
                                 ),
                                 Text(
-                                  'Server IPv4:${widget.ipInformation['ipv4']}',
+                                  'Server IPv4:'
+                                  '${widget.ipInformation.wifiIPv4}',
                                   style: Theme.of(context).textTheme.bodyText1,
                                 ),
                                 Text(
-                                  'Server IPv6:${widget.ipInformation['ipv6']}',
+                                  'Server IPv6:'
+                                  '${widget.ipInformation.wifiIPv6}',
                                   style: Theme.of(context).textTheme.bodyText1,
                                 ),
                                 Text(
-                                  'Server Port:${widget.ipInformation['port']}',
+                                  'Server Port:42069',
                                   style: Theme.of(context).textTheme.bodyText1,
                                 ),
                               ],

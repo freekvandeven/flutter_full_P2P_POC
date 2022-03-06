@@ -1,4 +1,5 @@
 import 'package:distributed/src/models/game_information.dart';
+import 'package:distributed/src/models/network_information.dart';
 import 'package:distributed/src/models/player.dart';
 import 'package:distributed/src/routes.dart';
 import 'package:distributed/src/service/game.dart';
@@ -30,11 +31,9 @@ class LobbyScreen extends StatefulWidget {
 
 class _LobbyScreenState extends State<LobbyScreen> {
   bool lobbyStarted = false;
-  String ipv6 = '';
-  String ipv4 = '';
+  NetworkInformation networkInformation = NetworkInformation();
   String port = '';
   List<PlayerInformation> players = [];
-  Map<String, String> ipInformation = {};
   String playerName = '';
   String playerRole = '';
   String playerAgent = '';
@@ -45,13 +44,13 @@ class _LobbyScreenState extends State<LobbyScreen> {
     super.initState();
     // players = widget.gameService.getGame()!.gameInformation.players;
     // // add postframe callback to get ip
-    // WidgetsBinding.instance?.addPostFrameCallback((_) {
-    //   widget.ipService.addListener(updateIp);
-    //   widget.ipService.getIpAddress();
-    //   widget.socketService.addListener(updatePort);
-    //   widget.socketService.startServer();
-    //   widget.gameService.addListener(updateGameInformation);
-    // });
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      widget.ipService.addListener(updateIp);
+      widget.ipService.getIpAddress();
+      widget.socketService.addListener(updatePort);
+      widget.socketService.startServer();
+      widget.gameService.addListener(updateGameInformation);
+    });
   }
 
   void updateGameInformation() {
@@ -69,22 +68,21 @@ class _LobbyScreenState extends State<LobbyScreen> {
       });
     }
     if (widget.gameService.getGame() != null) {
-      widget.gameService.addNewPlayer(
-        PlayerInformation(
-          playerName: 'host',
-          ip: ipv6,
-          port: port,
-        ),
-      );
+      // widget.gameService.addNewPlayer(
+      //   PlayerInformation(
+      //     playerName: 'host',
+      //     ip: ipv6,
+      //     port: port,
+      //   ),
+      // );
     }
   }
 
   void updateIp() {
     if (mounted) {
+      debugPrint('network information incoming');
       setState(() {
-        ipv4 = widget.ipService.ipInformation!['ipv4'] ?? 'error';
-        ipv6 = widget.ipService.ipInformation!['ipv6'] ?? 'error';
-        ipInformation = widget.ipService.ipInformation!;
+        networkInformation = widget.ipService.ipInformation!;
       });
     }
   }
@@ -161,7 +159,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
                                     });
                                   },
                                   isHost: true,
-                                  ipInformation: ipInformation,
+                                  ipInformation: networkInformation,
                                 ),
                               ),
                               Padding(

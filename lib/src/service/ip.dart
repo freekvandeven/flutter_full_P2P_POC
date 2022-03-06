@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:distributed/src/models/network_information.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:network_info_plus/network_info_plus.dart';
@@ -7,12 +8,12 @@ import 'package:network_info_plus/network_info_plus.dart';
 abstract class IpService implements ChangeNotifier {
   IpService._();
   void getIpAddress();
-  Map<String, String>? get ipInformation;
+  NetworkInformation? get ipInformation;
 }
 
 class ChipsIpService extends ChangeNotifier implements IpService {
   ChipsIpService();
-  Map<String, String>? ipInformationMap;
+  NetworkInformation? ipInformationMap;
   final NetworkInfo _networkInfo = NetworkInfo();
 
   @override
@@ -25,7 +26,7 @@ class ChipsIpService extends ChangeNotifier implements IpService {
   }
 
   @override
-  Map<String, String>? get ipInformation => ipInformationMap;
+  NetworkInformation? get ipInformation => ipInformationMap;
 
   Future<void> _initNetworkInfo() async {
     String? wifiName;
@@ -35,7 +36,6 @@ class ChipsIpService extends ChangeNotifier implements IpService {
     String? wifiGatewayIP;
     String? wifiBroadcast;
     String? wifiSubmask;
-    ipInformationMap = {};
     try {
       if (!kIsWeb && Platform.isIOS) {
         var status = await _networkInfo.getLocationServiceAuthorization();
@@ -53,7 +53,6 @@ class ChipsIpService extends ChangeNotifier implements IpService {
       }
     } on PlatformException catch (e) {
       debugPrint('Failed to get Wifi Name ${e.toString()}');
-      wifiName = 'Failed to get Wifi Name';
     }
 
     try {
@@ -73,7 +72,6 @@ class ChipsIpService extends ChangeNotifier implements IpService {
       }
     } on PlatformException catch (e) {
       debugPrint('Failed to get Wifi BSSID ${e.toString()}');
-      wifiBSSID = 'Failed to get Wifi BSSID';
     }
 
     try {
@@ -82,7 +80,6 @@ class ChipsIpService extends ChangeNotifier implements IpService {
       debugPrint(
         'Failed to get Wifi IPv4 ${e.toString()}',
       );
-      wifiIPv4 = 'Failed to get Wifi IPv4';
     }
 
     try {
@@ -92,13 +89,10 @@ class ChipsIpService extends ChangeNotifier implements IpService {
         debugPrint(
           'WINDOWS ${e.toString()}',
         );
-
-        wifiIPv6 = 'Failed to get Wifi IPv6 because WINDOWS';
       } else {
         debugPrint(
           'Failed to get Wifi IPv6 ${e.toString()}',
         );
-        wifiIPv6 = 'Failed to get Wifi IPv6';
       }
     }
 
@@ -109,13 +103,10 @@ class ChipsIpService extends ChangeNotifier implements IpService {
         debugPrint(
           'WINDOWS ${e.toString()}',
         );
-
-        wifiSubmask = 'Failed to get Wifi submask because WINDOWS';
       } else {
         debugPrint(
           'Failed to get Wifi submask address ${e.toString()}',
         );
-        wifiSubmask = 'Failed to get Wifi submask address';
       }
     }
 
@@ -126,13 +117,10 @@ class ChipsIpService extends ChangeNotifier implements IpService {
         debugPrint(
           'WINDOWS ${e.toString()}',
         );
-
-        wifiBroadcast = 'Failed to get Wifi broadcast because WINDOWS';
       } else {
         debugPrint(
           'Failed to get Wifi broadcast ${e.toString()}',
         );
-        wifiBroadcast = 'Failed to get Wifi broadcast';
       }
     }
 
@@ -143,27 +131,26 @@ class ChipsIpService extends ChangeNotifier implements IpService {
         debugPrint(
           'WINDOWS ${e.toString()}',
         );
-
-        wifiGatewayIP = 'Failed to get Wifi gateway address because WINDOWS';
       } else {
         debugPrint(
           'Failed to get Wifi gateway address ${e.toString()}',
         );
-        wifiGatewayIP = 'Failed to get Wifi gateway address';
       }
     }
-    ipInformationMap!['ipv4'] = wifiIPv4 ?? '';
-    ipInformationMap!['ipv6'] = wifiIPv6 ?? '';
-    ipInformationMap!['submask'] = wifiSubmask ?? '';
-    ipInformationMap!['broadcast'] = wifiBroadcast ?? '';
-    ipInformationMap!['gateway'] = wifiGatewayIP ?? '';
-    ipInformationMap!['bssid'] = wifiBSSID ?? '';
-    ipInformationMap!['ssid'] = wifiName ?? '';
+    ipInformationMap = NetworkInformation(
+      wifiName: wifiName,
+      wifiBSSID: wifiBSSID,
+      wifiIPv4: wifiIPv4,
+      wifiIPv6: wifiIPv6,
+      wifiGatewayIP: wifiGatewayIP,
+      wifiBroadcast: wifiBroadcast,
+      wifiSubmask: wifiSubmask,
+    );
     notifyListeners();
   }
 
   String getNetworkInterface() {
-    return 'wlp3s0';
-        // NetworkInterface.list().then((value) => print(value));
+    return ipInformationMap!.networkInterface = 'wlp3s0';
+    // NetworkInterface.list().then((value) => print(value));
   }
 }
