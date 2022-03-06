@@ -89,6 +89,7 @@ Map<String, WidgetBuilder> getRoutes() {
     ChipsRoute.gameBrowserScreen: (context) => GameBrowserScreen(
           serverSocketService: context.read(),
           clientSocketService: context.read(),
+          networkScanService: context.read(),
           gameService: context.read(),
         ),
     ChipsRoute.lobbyScreen: (context) => LobbyScreen(
@@ -119,6 +120,7 @@ Map<String, AnimatedWidgetBuilder> getAnimatedRoutes() {
     ChipsRoute.gameBrowserScreen: (context, _, __) => GameBrowserScreen(
           serverSocketService: context.read(),
           clientSocketService: context.read(),
+          networkScanService: context.read(),
           gameService: context.read(),
         ),
     ChipsRoute.lobbyScreen: (context, _, __) => LobbyScreen(

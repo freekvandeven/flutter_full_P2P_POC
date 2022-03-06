@@ -2,6 +2,7 @@ import 'package:distributed/src/models/player.dart';
 import 'package:distributed/src/routes.dart';
 import 'package:distributed/src/service/client.dart';
 import 'package:distributed/src/service/game.dart';
+import 'package:distributed/src/service/scan.dart';
 import 'package:distributed/src/service/server.dart';
 import 'package:distributed/src/ui/screens/base/base.dart';
 import 'package:distributed/src/ui/screens/lobby/widgets/lobby_games.dart';
@@ -14,11 +15,13 @@ class GameBrowserScreen extends StatefulWidget {
     required this.serverSocketService,
     required this.clientSocketService,
     required this.gameService,
+    required this.networkScanService,
     Key? key,
   }) : super(key: key);
 
   final ServerSocketService serverSocketService;
   final ClientSocketService clientSocketService;
+  final NetworkScanService networkScanService;
   final GameService gameService;
 
   @override
@@ -58,6 +61,7 @@ class _GameBrowserScreenState extends State<GameBrowserScreen> {
   @override
   void initState() {
     widget.gameService.addListener(onJoined);
+    widget.networkScanService.scanLocalNetwork();
     super.initState();
   }
 

@@ -1,6 +1,7 @@
 import 'package:distributed/src/service/client.dart';
 import 'package:distributed/src/service/game.dart';
 import 'package:distributed/src/service/ip.dart';
+import 'package:distributed/src/service/scan.dart';
 import 'package:distributed/src/service/server.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,11 @@ class DependencyProvider extends StatelessWidget {
         ChangeNotifierProvider<ServerSocketService>(
           create: (context) =>
               ChipsServerSocketService(gameService: context.read()),
+        ),
+        Provider<NetworkScanService>(
+          create: (context) => ChipsNetworkScanService(
+            ipService: context.read(),
+          ),
         ),
       ],
       child: child,

@@ -7,7 +7,7 @@ import 'package:network_info_plus/network_info_plus.dart';
 
 abstract class IpService implements ChangeNotifier {
   IpService._();
-  void getIpAddress();
+  Future<NetworkInformation> getIpAddress();
   NetworkInformation? get ipInformation;
 }
 
@@ -17,18 +17,19 @@ class ChipsIpService extends ChangeNotifier implements IpService {
   final NetworkInfo _networkInfo = NetworkInfo();
 
   @override
-  void getIpAddress() {
+  Future<NetworkInformation> getIpAddress() async {
     if (ipInformationMap == null) {
-      _initNetworkInfo();
+      return _initNetworkInfo();
     } else {
       notifyListeners();
+      return ipInformationMap!;
     }
   }
 
   @override
   NetworkInformation? get ipInformation => ipInformationMap;
 
-  Future<void> _initNetworkInfo() async {
+  Future<NetworkInformation> _initNetworkInfo() async {
     String? wifiName;
     String? wifiBSSID;
     String? wifiIPv4;
@@ -137,7 +138,8 @@ class ChipsIpService extends ChangeNotifier implements IpService {
         );
       }
     }
-    ipInformationMap = NetworkInformation(
+    notifyListeners();
+    return ipInformationMap = NetworkInformation(
       wifiName: wifiName,
       wifiBSSID: wifiBSSID,
       wifiIPv4: wifiIPv4,
@@ -146,7 +148,6 @@ class ChipsIpService extends ChangeNotifier implements IpService {
       wifiBroadcast: wifiBroadcast,
       wifiSubmask: wifiSubmask,
     );
-    notifyListeners();
   }
 
   String getNetworkInterface() {
