@@ -74,6 +74,11 @@ class SettingsScreen extends StatelessWidget {
               'Agent configuration',
             ),
           ),
+          Container(
+            child: Text(
+              'All stored agents:',
+            ),
+          ),
         ],
       ),
     );
